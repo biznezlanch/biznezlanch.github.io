@@ -1,8 +1,714 @@
-div {
-	background-size: cover;
-	margin: 0 auto;
-	height: 200px;
+// Vars 
+$pickled-bluewood =  #363c5c
+$cadet-blue       =  #b0b3c4
+$golden-dream     =  #e9d039
+$indigo           =  #4167c9
+$royal-blue       =  #636fe6
+$wine-berry       =  #4b1a3a
+$comet            =  #5d5f81
+$downy            =  #65d8b9
+$santas-gray      =  #9b9db1
+$red-damask       =  #d95d4f
+$twitter          =  #00b1ed
+$facebook         =  #3e5a9a
+
+$body-bg          =  $pickled-bluewood
+$body-color       =  white
+$sans             =  'League Spartan', sans-serif
+$serif            =  'Old Standard TT', serif
+$max-width        =  1024px
+$height-icon      =  14px
+$width-line       =  25px
+$height-line      =  2px
+$transition-time  =  0.4s
+$rotation         =  45deg
+$translateY       =  ($height-icon / 2)
+$translateX       =  0
+$snappy           =  cubic-bezier(0.694,  0.048, 0.335, 1.000)
+
+// Mixins 
+clearfix()
+  &:before
+  &:after
+    content: ""
+    display: table
+  &:after
+    clear: both
+    
+visual-hide() 
+  clip: rect(1px, 1px, 1px, 1px)
+  height: 1px
+  overflow: hidden
+  position: absolute
+  width: 1px
+  
+placeholder()
+  &::-webkit-input-placeholder
+    {block}
+  &:-moz-placeholder
+    {block}
+  &::-moz-placeholder
+    {block}
+  &:-ms-input-placeholder
+    {block}
+
+media(minWidth, maxWidth)
+    @media only screen and (min-width: minWidth) and (max-width: maxWidth)
+        {block}
+
+media-max(maxWidth)
+    @media only screen and (max-width: maxWidth)
+        {block}
+
+media-min(minWidth)
+    @media only screen and (min-width: minWidth)
+        {block}
+        
+@font-face {
+  font-family: 'League Spartan';
+  src: url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.eot');
+  src: url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.eot?#iefix') format('embedded-opentype'),
+       url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.woff2') format('woff2'),
+       url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.woff') format('woff'),
+       url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.ttf') format('truetype'),
+       url('https://dl.dropboxusercontent.com/u/81135676/leaguespartan-bold.svg#league_spartanbold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}        
+
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    left: 20%;
+  }
+  100% {
+    opacity: 1;
+    left: 0;
+  }
 }
-.Food {
-	background: url('file:///Users/lucysmith/Desktop/Biznez%20Lanch/falafel.jpg')
-}
+
+.check_box
+  &:not(:checked), &:checked 
+    position: absolute
+    left: -9999px
+    + label
+      position: relative
+      color: white
+      font-size: 12px
+      padding-left: 25px
+      cursor: pointer
+      span
+        position: relative
+        top: 4px
+      &:before
+        content: ""
+        position: absolute
+        left: 0
+        top: 2px
+        width: 12px
+        height: 12px
+        border: 2px solid #e1e1e1
+        background-color: #f8f8f8
+        border-radius: 3px
+        transition: border-color 0.2s ease, background-color 0.2s ease
+      &:after
+        content: "✔"
+        position: absolute
+        top: 7px
+        left: 4px
+        text-align: center
+        font-size: 11px
+        line-height: 0.8
+        color: white
+        transition: transform 0.2s $snappy, opacity 0.3s ease
+    &:hover
+      + label
+        &:before
+          border-color: $downy
+    &:focus
+      + label
+        &:before
+          //border: 1px dotted blue
+  &:not(:checked)
+    + label
+      &:after
+        opacity: 0
+        transform: scale(0)
+  &:checked
+    + label
+      &:before
+        background-color: $downy
+        border-color: $downy
+      &:after
+        opacity: 1
+        transform: scale(1)
+
+body
+  width: 100%
+  height: 100%
+  font-family: $sans
+  line-height: 1.2
+  background-color: $body-bg
+  
+::selection 
+  background: #999
+  color: white
+  text-shadow: none
+
+::-webkit-selection
+  background: #999
+  color: white
+  text-shadow: none  
+
+.food_cta
+  display: inline-block
+  padding: 11px 28px
+  text-decoration: none
+  letter-spacing: 1px
+  position: relative
+  border: 0
+  border-radius: 1.4em
+  color: white
+  &:focus
+    outline: none
+
+.nav_bar
+  width: 88%
+  max-width: $max-width
+  margin: 70px auto 0 auto
+  color: $cadet-blue
+  padding-bottom: 38px
+  clearfix()
+  .nav_logo
+    width: 150px
+    float: left
+    cursor: pointer
+    span
+      visual-hide()
+    #fork, #knife
+      transform: rotate(0deg) translateX(0)
+      transform-origin: 50% 50%
+      transition: all 0.3s $snappy
+      path
+        transition: all 0.25s ease
+    &:hover
+      #fork
+        transform: rotate(30deg) translateX(30px)
+        path
+          fill: white
+      #knife
+        transform: rotate(-30deg) translateX(-30px)
+        path
+          fill: white
+  .nav_toggle
+    float: right
+    cursor: pointer
+    overflow: hidden
+    padding: 15px 0
+    .toggle_name
+      padding-left: 9px
+      font-size: 11px
+      position: relative
+      left: 0
+      color: $cadet-blue
+      transform: translateX(0)
+      transition: color 0.25s ease, left 0.2s $snappy
+      &.is-open
+        left: 100px
+    .hamb_toggle
+      width: $width-line
+      height: $height-icon
+      position: relative
+      display: inline-block
+      margin: 0
+      .line
+        display: block
+        background: $cadet-blue
+        width: $width-line
+        height: $height-line
+        position:absolute
+        left:0
+        border-radius: ($height-line / 2)
+        transition: all $transition-time
+        &.line-1 
+          top: 0
+        &.line-2
+          top: 50%
+        &.line-3
+          top: 100%
+          
+      &:hover, &:focus
+       .line-1
+          transform: translateY($height-line / 2 * -1)
+       .line-3 
+          transform: translateY($height-line / 2)
+      &.is-open
+        .line-1
+          transform: translateY($translateY) translateX($translateX) rotate($rotation)
+        .line-2
+          opacity:0
+        .line-3
+          transform: translateY($translateY * -1) translateX($translateX) rotate($rotation * -1)
+        &:hover
+          .line
+            background: white
+  &:hover
+    .toggle_name
+      color: white
+
+    
+.nav_overlay
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  visibility: hidden
+  opacity: 0
+  height: 100%
+  z-index: 10
+  transition: all 0.3s ease
+  &:before
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    opacity: 0
+    width: 50%
+    height: 100%
+    background-color: $body-bg
+    transform: translateX(-150%)
+    transition: transform 0.4s $snappy, opacity 0.25s ease-in-out
+  &:after
+    content: ''
+    position: absolute
+    top: 0
+    right: 0
+    opacity: 0
+    width: 51%
+    height: 100%
+    background-color: $body-bg
+    transform: translateX(150%)
+    transition: transform 0.4s $snappy, opacity 0.25s ease-in-out
+  .fix_top
+    position: fixed
+    bottom: 40px
+    right: 80px
+    cursor: pointer
+    width: 50px
+    height: 50px
+    color: white
+    transition: all 0.3s ease
+    z-index: 101
+    svg
+      width: 50px
+      height: 50px
+      path
+        fill: white
+    &:hover
+      bottom: 45px
+  .overlay_menu
+    position: relative
+    height: 70%
+    top: 50%
+    transform: translateY(-50%)
+    font-size: 50px
+    font-weight: 400
+    text-align: center
+    z-index: 100
+    ul
+      list-style: none
+      padding: 0
+      margin: 0 auto
+      display: inline-block
+      position: relative
+      height: 100%
+      li
+        display: block
+        height: 25%
+        height: calc(100% / 4)
+        min-height: 50px
+        position: relative
+        opacity: 0
+        a
+          display: block
+          position: relative
+          color: white
+          transform: scale(1)
+          text-decoration: none
+          overflow: hidden
+          transition: transform 0.25s ease
+          &:after
+            background: none repeat scroll 0 0 transparent
+            bottom: 0.6em
+            content: ""
+            display: block
+            height: 9px
+            left: 0
+            width: 100%
+            position: absolute
+            background: rgba(#0BC4D9, 0.8)
+            transform: scaleX(0)
+            transition: transform 0.3s $snappy
+          &:hover
+            transform: scale(0.9)
+            &:after
+              transform: scaleX(1);
+        &:nth-child(2)
+          a:after
+            background: rgba($red-damask, 0.8)
+        &:nth-child(3)
+          a:after
+            background: rgba($golden-dream, 0.8)
+        &:last-child
+          a:after
+            background: rgba(#636FE6, 0.8)
+  &.is-open
+    visibility: visible
+    opacity: 0.8
+    &:before, &:after
+      transform: translateX(0)
+      opacity: 1
+    .overlay_menu
+      ul
+        li
+          animation: fadeInRight 0.55s ease forwards
+          animation-delay: 0.35s
+          &:nth-of-type(2)
+            animation-delay: 0.45s
+    
+          &:nth-of-type(3)
+            animation-delay: 0.55s
+          
+          &:nth-of-type(4)
+            animation-delay: 0.65s
+          
+    
+.blocks_container
+  width: 88%
+  max-width: $max-width
+  margin: 0 auto
+  position: relative
+  margin-bottom: 50px
+  overflow: hidden
+  background-color: white
+  box-shadow: 0px 8px 21px 0px rgba(50, 50, 50, 0.50)
+  min-height: 30vh
+  clearfix()
+  transition: all 0.3s ease
+  &:hover
+    box-shadow: 0px 11px 48px 0px rgba(50, 50, 50, 0.50)
+  
+$block
+  float: left
+  position: relative
+  background-size: cover
+  background-repeat: no-repeat
+  transition: all 0.3s ease
+  clearfix()
+
+.big_block
+  @extend $block
+  width: 100%
+  height: 420px
+  .block_content
+    float: right
+    width: 60%
+    text-align: right
+    padding-right: 35px
+    color: white
+    h2
+      font-size: 48px
+      margin-bottom: 0
+      clearfix()
+    h4
+      font-size: 21px
+      width: 76%
+      float: right
+      font-weight: 300
+      font-family: $serif
+      clearfix()
+    .food_cta
+      background-color: $golden-dream
+
+.middle_block_container
+  width: 100%
+  height: 600px
+  clearfix()
+  .b_half
+    height: 100%
+    float: left
+    clearfix()
+    &:first-child
+      width: 40%
+    &:last-child
+      width: 60%
+      
+.medium_block
+  @extend $block
+  width: 100%
+  height: 320px
+  &.peas
+    .block_content
+      position: absolute
+      width: 60%
+      margin: 0
+      top: 20px
+      right: 30px
+      text-align: right
+      color: white
+      padding: 10px 20px
+      h2
+        font-size: 40px
+        color: white
+        margin-top: 0
+        margin-bottom: 7px
+      h4
+        font-size: 30px
+        color: white
+        font-weight: 300
+        margin: 0
+        line-height: 1.5
+        font-family: $serif
+      .food_cta
+        background-color: #3E67C9
+        font-size: 13px
+        padding: 9px 24px
+        margin-top: 17px
+  &.medium_tall
+    height: 600px
+    .block_content
+      position: absolute
+      text-align: center
+      width: 90%
+      margin: 0 auto
+      bottom: 60px
+      left: 0
+      color: white
+      padding: 10px 20px
+      h2
+        font-size: 30px
+        line-height: 1.5
+        margin-bottom: 0
+      h4
+        font-size: 22px
+        font-weight: 300
+        margin-top: 0
+        font-family: $serif
+      .food_cta
+        font-size: 13px
+        padding: 10px 16px
+        background-color: $wine-berry
+
+.small_block
+  @extend $block  
+  width: 50%
+  height: 280px
+  .small_block_container
+    position: absolute
+    top: 40px
+    left: 0
+    width: 100%
+    margin: 0 auto
+    text-align: center
+    h2
+      color: white
+      font-size: 17px
+      padding: 0 11px
+    .food_cta
+      background-color: $red-damask
+      border-radius: 50%
+      width: 40px
+      height: 40px
+      line-height: 40px
+      padding: 0
+      text-align: center
+      svg
+        width: 40px
+        height: 25px
+        position: relative
+        top: 7px
+        left: 1px
+        path
+          fill: white
+      
+  &.recipe
+    background-color: $royal-blue
+    .recipe_container
+      position: absolute
+      top: 50%
+      left: 50%
+      width: 100%
+      padding: 0 10px
+      transform: translate(-50%, -50%)
+      text-align: center
+      h2
+        font-family: $serif
+        color: white
+        font-size: 28px
+        font-weight: 400
+      .check_container
+        margin: 10px auto 25px auto
+     .food_cta
+       background-color: $downy
+       padding: 9px 23px
+       font-size: 12px
+.food_input
+  width: 70%
+  margin: 10px auto
+  border: 0
+  font-size: 13px
+  background: none
+  background-color: white
+  padding: 6px 10px
+  border-radius: 1.3em
+  color: darken($santas-gray, 55%)
+  +placeholder()
+   color: $santas-gray
+   font-size: 11px
+   text-align: center
+   position: relative
+   top: 4px
+  &:focus
+    outline: none
+ 
+.last_blocks_container
+  width: 100%
+  height: 420px
+  clearfix()
+  .last_half
+    height: 100%
+    float: left
+    clearfix()
+    &:first-child
+      width: 70%
+    &:last-child
+      width: 30%
+.last_medium_block
+  @extend $block
+  width: 100%
+  height: 100%
+  .lmb_content
+    position: absolute
+    top: 20px
+    left: 35px
+    h2
+      font-size: 40px
+      color: $comet
+      margin-bottom: 7px
+    h4
+      font-size: 30px
+      color: $comet
+      font-weight: 300
+      margin: 0
+      line-height: 1.5
+      font-family: $serif
+    .food_cta
+      background-color: $red-damask
+      font-size: 13px
+      padding: 9px 24px
+      margin-top: 17px
+
+.small_social
+  width: 100%
+  height: 50%
+  position: relative
+  .sms_content
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    transform-style: preserve-3d
+    .sms_ill
+      text-align: center
+      svg
+        width: 35px
+        height: 50px
+        path
+          fill: white
+    .food_cta
+      margin-top: 8px
+  &.fb
+    background-color: $facebook
+    .food_cta
+      background-color: #5B79B8
+  &.twitter
+    background-color: $twitter
+    .food_cta
+      background-color: #72C8E6
+      
+.footer
+  color: $cadet-blue
+  font-size: 12px
+  text-align: center
+  padding-bottom: 50px
+  transition: letter-spacing 0.35s ease
+  &:hover
+    letter-spacing: 2px
+    
++media-max(766px)
+  .nav_overlay
+    .overlay_menu
+      height: 80%
+      font-size: 30px
+      ul
+        li
+          height: 18%
+          height: calc(100% / 10)
+  .middle_block_container
+    height: 500px
+    .b_half
+      &:first-child, &:last-child
+        width: 100%
+        height: auto
+      .medium_block
+        height: 320px
+  .last_blocks_container
+    height: 500px
+    .last_half
+      &:first-child, &:last-child
+        width: 100%
+        height: auto
+      .last_medium_block
+        width: 100%
+        height: 320px
+      .small_social
+        float: left
+        width: 50%
+        height: 220px
+        
++media-max(495px)
+  .big_block
+    .block_content
+      h2
+        font-size: 35px
+      h4
+        font-size: 18px
+  .medium_block
+    @extend $block
+    width: 100%
+    height: 320px
+    &.peas
+      .block_content
+        h2
+          font-size: 34px
+        h4
+          font-size: 23px
+    &.medium_tall
+      .block_content
+        h2
+          font-size: 27px
+        h4
+          font-size: 19px
+  .small_block
+    width: 100%
+  .last_blocks_container
+    .last_half
+      .last_medium_block
+        .lmb_content
+          h2
+            font-size: 30px
+          h4
+            font-size: 20px
+      .small_social
+        width: 100%
