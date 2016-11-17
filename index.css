@@ -1,8 +1,9 @@
 h1 { color: red
 
 }
-div {
+.latte {
 	background-size: cover;
 	margin: 0 auto;
-	height: 200px;
+	max-height: 500px
+	max-width:1200px;
 }
